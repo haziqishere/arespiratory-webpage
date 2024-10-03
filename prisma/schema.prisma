@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  fullName  String
+  email     String
+  address   String?
+  createdAt DateTime @default(now())
+  orders    Order[]
+  cart      Cart?
+  reviews   Review[]
+}
+
+model Admin {
+  id        Int       @id @default(autoincrement())
+  fullName  String
+  email     String
+  createdAt DateTime  @default(now())
+  products  Product[]
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  productId   Int
+  totalAmount Float
+  userId      Int
+  status      Boolean
+  paymentId   String
+  orderDate   DateTime    @default(now())
+  customer    Customer    @relation(fields: [userId], references: [id])
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  orderId   Int
+  productId Int
+  quantity  Int
+  size      String
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@id([orderId, productId])
+}
+
+model Cart {
+  cartId      Int        @id @default(autoincrement())
+  productId   Int
+  totalAmount Decimal
+  userId      Int        @unique
+  customer    Customer   @relation(fields: [userId], references: [id])
+  cartItems   CartItem[]
+}
+
+model CartItem {
+  cartId    Int
+  productId Int
+  quantity  Int
+  size      String
+  cart      Cart    @relation(fields: [cartId], references: [cartId])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@id([cartId, productId])
+}
+
+model Product {
+  id            Int         @id @default(autoincrement())
+  name          String
+  price         Decimal
+  description   String
+  imagePath     String
+  stockQuantity Int
+  size          String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  adminId       Int
+  admin         Admin       @relation(fields: [adminId], references: [id])
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+  reviews       Review[]
+}
+
+model Review {
+  custId    Int
+  productId Int
+  comment   String
+  customer  Customer @relation(fields: [custId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@id([custId, productId])
+}
