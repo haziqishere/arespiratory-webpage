@@ -13,14 +13,11 @@ export const Logo = () => {
     <Link href={"/"}>
       <div className="hover:opacity-75 transition items-center gap-x-2 hidden md:flex">
         <Image
-          src="/image/Official Icon (Full Color).svg"
+          src="/image/Horizontal Logo (Full Color).svg"
           alt="Taskify Logo"
-          width={30}
-          height={30}
+          width={200}
+          height={200}
         />
-        <p className={cn("text-lg text-neutral-700", headingFont.className)}>
-          Taskify
-        </p>
       </div>
     </Link>
   );
