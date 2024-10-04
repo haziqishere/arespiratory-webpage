@@ -1,5 +1,5 @@
 import React from "react";
-import ItemForm from "./_components/itemform";
+import ItemForm from "./_components/productform";
 
 type Props = {};
 
