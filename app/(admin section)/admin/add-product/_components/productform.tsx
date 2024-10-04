@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import ImagePicker from "./image-picker";
 
 type Input = z.infer<typeof createProductSchema>;
 
@@ -35,7 +34,6 @@ const AddProductForm = () => {
         { size: "XL", stockQuantity: 0 },
         { size: "XXL", stockQuantity: 0 },
       ],
-      image: null,
     },
   });
 
@@ -45,14 +43,33 @@ const AddProductForm = () => {
   });
 
   // onSubmit function
-  function onSubmit(data: Input) {
-    console.log("form data:", data);
-  }
+  const onSubmit = async (data: Input) => {
+    try {
+      console.log("Submitting data: ", data);
+      const response = await fetch("/api/product/addProduct", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const responseText = await response.text();
+
+      if (!response.ok) {
+        throw new Error("Failed to add product");
+      }
+
+      const result = await response.json();
+      console.log("Product added successfully:", result);
+    } catch (error) {
+      console.error("Failed to add product:", error);
+    }
+  };
 
   return (
     <div className="w-2/6">
       <Form {...form}>
-        {/* Ensure that form.handleSubmit is used correctly */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full mt-4">
           {/* Product Name */}
           <FormField
@@ -100,9 +117,7 @@ const AddProductForm = () => {
                     type="number"
                     step=".01"
                     {...field}
-                    onChange={(e) =>
-                      field.onChange(parseFloat(e.target.valueAsNumber))
-                    }
+                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
                   />
                 </FormControl>
               </FormItem>
@@ -129,7 +144,7 @@ const AddProductForm = () => {
                             placeholder={`Stock for size ${fields[index].size}`}
                             {...field}
                             onChange={(e) =>
-                              field.onChange(parseFloat(e.target.valueAsNumber))
+                              field.onChange(parseFloat(e.target.value))
                             }
                           />
                         </FormControl>
@@ -140,20 +155,6 @@ const AddProductForm = () => {
               ))}
             </div>
           </div>
-
-          {/* Product Image */}
-          <FormField
-            control={form.control}
-            name="image"
-            render={({ field }) => (
-              <FormItem className="flex flex-col items-start w-full sm:items-center sm:flex-row">
-                <FormLabel className="flex-[1] text-xl">Image</FormLabel>
-                <FormControl className="flex-[1] text-l">
-                  <ImagePicker label="Product Image" name="image" />
-                </FormControl>
-              </FormItem>
-            )}
-          />
 
           {/* Use a native button for testing */}
           <Button type="submit">Submit</Button>

@@ -9,5 +9,6 @@ export const createProductSchema = z.object({
       size: z.enum(["XS", "S", "M", "L", "XL", "XXL"]),
       stockQuantity: z.number().int().positive("Stock quantity must be a positive integer"),
     })
-  ).min(1, "At least one size must be provided with stock quantity"),
+  ).min(1, "At least one size must be provided with stock quantity")
+  //images: z.instanceof(File),
 });

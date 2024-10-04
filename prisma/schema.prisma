@@ -79,11 +79,11 @@ model Product {
   name         String
   price        Float
   description  String
-  imagePath    String
+  imagePath    String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  adminId      Int
-  admin        Admin         @relation(fields: [adminId], references: [id])
+  adminId      Int?
+  admin        Admin?        @relation(fields: [adminId], references: [id])
   productSizes ProductSize[]
   orderItems   OrderItem[]
   cartItems    CartItem[]

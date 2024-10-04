@@ -61,8 +61,12 @@ const ImagePicker = ({ label, name }: Props) => {
           accept="image/png, image/jpeg"
           name={name}
           ref={imageInput}
-          onChange={handleImageChange}
           required
+          onChange={(e) => {
+            handleImageChange(e);
+            const files = Array.from(e.target.files);
+            field.onChange(files);
+          }}
         />
         <Button onClick={handlePickClick}>Pick an Image</Button>
       </div>
