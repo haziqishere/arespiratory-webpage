@@ -83,26 +83,7 @@ const ImagePicker = ({ label, name, onImagesChange }: Props) => {
         <CarouselNext />
       </Carousel>
 
-      <label htmlFor={name}>{label}</label>
-      <div className="flex flex-col items-start gap-6 mb-4">
-        <div className="flex flex-wrap gap-4">
-          {pickedImages.length === 0 && (
-            <p className="m-0 p-4">No images picked yet</p>
-          )}
-          {pickedImages.map((image, index) => (
-            <div
-              key={index}
-              className="w-40 h-40 relative border-2 border-gray-400"
-            >
-              <Image
-                src={image}
-                alt={`Picked image ${index + 1}`}
-                fill
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
+      <div className="mt-4">
         <Input
           className="hidden"
           type="file"
