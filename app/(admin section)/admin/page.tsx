@@ -9,7 +9,7 @@ const AdminPage = (props: Props) => {
       <h1>Admin Page</h1>
 
       <Button>
-        <a href="/admin/add-item">Add New Item</a>
+        <a href="/admin/add-product">Add New Item</a>
       </Button>
     </div>
   );

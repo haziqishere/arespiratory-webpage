@@ -5,8 +5,8 @@ type Props = {};
 
 const AddItemPage = (props: Props) => {
   return (
-    <div className="flex flex-row items-start max-w-l px-8 mx-auto my-10 sm:px-0">
-      <h1>Add Item Page</h1>
+    <div className="flex flex-1 items-start">
+      <div className=""></div>
       <ItemForm />
     </div>
   );

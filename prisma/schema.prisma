@@ -79,6 +79,7 @@ model Product {
   name         String
   price        Float
   description  String
+  sku          String
   imagePath    String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt

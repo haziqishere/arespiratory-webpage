@@ -20,6 +20,7 @@ export async function POST(req: Request) {
                     description: validatedData.description,
                     price: validatedData.price,
                     imagePath: "C:/test", // TODO: Replace with actual image path
+                    sku: validatedData.sku,
                 },
             });
 

@@ -1,10 +1,4 @@
-"use client";
 import React from "react";
-import { createProductSchema } from "@/validators/product";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useForm, useFieldArray } from "react-hook-form";
-
 import { Button } from "@/components/ui/button"; // Custom button component
 import {
   Form,
@@ -18,58 +12,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 
-type Input = z.infer<typeof createProductSchema>;
 
-const AddProductForm = () => {
-  const form = useForm<Input>({
-    resolver: zodResolver(createProductSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      price: 0,
-      sku: "",
-      stock: [
-        { size: "XS", stockQuantity: 0 },
-        { size: "S", stockQuantity: 0 },
-        { size: "M", stockQuantity: 0 },
-        { size: "L", stockQuantity: 0 },
-        { size: "XL", stockQuantity: 0 },
-        { size: "XXL", stockQuantity: 0 },
-      ],
-    },
-  });
+type Props = {};
 
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "stock",
-  });
+const export default const AddProductForm = (props: Props) => {
+    return(
 
-  // onSubmit function
-  const onSubmit = async (data: Input) => {
-    try {
-      console.log("Submitting data: ", data);
-      const response = await fetch("/api/product/addProduct", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+    );
+}
 
-      const responseText = await response.text();
-
-      if (!response.ok) {
-        throw new Error("Failed to add product");
-      }
-
-      const result = await response.json();
-      console.log("Product added successfully:", result);
-    } catch (error) {
-      console.error("Failed to add product:", error);
-    }
-  };
-
-  return (
+return (
     <div className="container mx-auto p-6">
       //TODO: Add breadcrumb
       <Card>
@@ -202,6 +154,3 @@ const AddProductForm = () => {
       </Card>
     </div>
   );
-};
-
-export default AddProductForm;
