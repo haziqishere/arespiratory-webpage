@@ -19,7 +19,9 @@ export async function POST(req: Request) {
                     name: validatedData.name,
                     description: validatedData.description,
                     price: validatedData.price,
-                    imagePath: "C:/test", // TODO: Replace with actual image path
+                    productImages: {
+                        create: validatedData.images.map((image: string) => ({ imagePath: image })),
+                    },
                     sku: validatedData.sku,
                 },
             });

@@ -4,6 +4,7 @@ import { createProductSchema } from "@/validators/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button"; // Custom button component
 import {
@@ -17,10 +18,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
+import ImagePicker from "./image-picker";
 
 type Input = z.infer<typeof createProductSchema>;
 
 const AddProductForm = () => {
+  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
+
   const form = useForm<Input>({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
@@ -36,6 +41,7 @@ const AddProductForm = () => {
         { size: "XL", stockQuantity: 0 },
         { size: "XXL", stockQuantity: 0 },
       ],
+      images: [],
     },
   });
 
@@ -46,6 +52,7 @@ const AddProductForm = () => {
 
   // onSubmit function
   const onSubmit = async (data: Input) => {
+    setLoading(true);
     try {
       console.log("Submitting data: ", data);
       const response = await fetch("/api/product/addProduct", {
@@ -187,10 +194,18 @@ const AddProductForm = () => {
                       </div>
                     </div>
                   </div>
+
+                  <div className="flex flex-col items-end space-y-6">
+                    <ImagePicker
+                      label="Product Images"
+                      name="images"
+                      onImagesChange={setImages}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="mt-4 flex justify-end space-x-4">
-                <Button type="submit">
+                <Button type="submit" disabled={loading}>
                   <Plus className="w-4 h-4 mr-1" />
                   Add Product
                 </Button>

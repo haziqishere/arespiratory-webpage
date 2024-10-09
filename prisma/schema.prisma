@@ -75,20 +75,27 @@ model CartItem {
 }
 
 model Product {
-  productId    Int           @id @default(autoincrement())
-  name         String
-  price        Float
-  description  String
-  sku          String
-  imagePath    String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  adminId      Int?
-  admin        Admin?        @relation(fields: [adminId], references: [id])
-  productSizes ProductSize[]
-  orderItems   OrderItem[]
-  cartItems    CartItem[]
-  reviews      Review[]
+  productId     Int            @id @default(autoincrement())
+  name          String
+  price         Float
+  description   String
+  sku           String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  adminId       Int?
+  admin         Admin?         @relation(fields: [adminId], references: [id])
+  productImages ProductImage[]
+  productSizes  ProductSize[]
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+  reviews       Review[]
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  imagePath String
+  productId Int
+  product   Product @relation(fields: [productId], references: [productId])
 }
 
 model ProductSize {

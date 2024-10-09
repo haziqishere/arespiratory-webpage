@@ -8,8 +8,8 @@ export const createProductSchema = z.object({
   stock: z.array(
     z.object({
       size: z.enum(["XS", "S", "M", "L", "XL", "XXL"]),
-      stockQuantity: z.number().int().positive("Stock quantity must be a positive integer"),
+      stockQuantity: z.number().int().nonnegative("Stock quantity must be a positive integer"),
     })
-  ).min(1, "At least one size must be provided with stock quantity")
-  //images: z.instanceof(File),
+  ).min(1, "At least one size must be provided with stock quantity"),
+  images: z.array(z.string().url()).min(1, "At least one image URL must be provided"),
 });
