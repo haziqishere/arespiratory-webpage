@@ -194,14 +194,27 @@ const AddProductForm = () => {
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  <div className="flex flex-col items-end space-y-6">
-                    <ImagePicker
-                      label="Product Images"
-                      name="images"
-                      onImagesChange={setImages}
-                    />
-                  </div>
+                <div className="mt-4 mr-10 flex flex-col items-end space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="images"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col items-start space-y-6 ">
+                        <FormLabel className=" block text-sm font-semibold text-gray-700">
+                          Product Image
+                        </FormLabel>
+                        <FormControl>
+                          <ImagePicker
+                            label="Product Images"
+                            name="images"
+                            onImagesChange={setImages}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </div>
               <div className="mt-4 flex justify-end space-x-4">

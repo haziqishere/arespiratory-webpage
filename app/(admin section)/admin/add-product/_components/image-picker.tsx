@@ -11,6 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import { ImagePlus } from "lucide-react";
 
 interface Props {
   label: string;
@@ -53,10 +54,18 @@ const ImagePicker = ({ label, name, onImagesChange }: Props) => {
       <Carousel className="w-full max-w-xs">
         <CarouselContent>
           {pickedImages.length === 0 && (
-            <div className="p-1">
+            <div className="p-4 pt-0">
               <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  No Images Selected
+                <CardContent className="flex aspect-square items-center justify-center p-12">
+                  <div
+                    className="flex flex-col items-center gap-3 text-center cursor-pointer"
+                    onClick={handlePickClick}
+                  >
+                    <ImagePlus className="w-10 h-10 text-sky-900 mx-auto" />
+                    <p className="text-gray-500">
+                      Select your image here. Jpeg, png are allowed
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
