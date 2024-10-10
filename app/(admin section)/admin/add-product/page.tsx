@@ -5,7 +5,7 @@ type Props = {};
 
 const AddItemPage = (props: Props) => {
   return (
-    <div className="flex flex-1 items-start">
+    <div className="flex flex-1 items-start ">
       <div className=""></div>
       <ItemForm />
     </div>

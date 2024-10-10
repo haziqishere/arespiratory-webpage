@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
+
 import ImagePicker from "./image-picker";
 
 type Input = z.infer<typeof createProductSchema>;
@@ -64,16 +66,19 @@ const AddProductForm = () => {
       });
 
       const responseText = await response.text();
-
       if (!response.ok) {
-        throw new Error("Failed to add product");
+        toast.error("Failed to add product");
       }
 
       const result = await response.json();
-      console.log("Product added successfully:", result);
     } catch (error) {
-      console.error("Failed to add product:", error);
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
+    toast.success("Product added successfully", {
+      description: `${data.name} has been added into catalog`,
+    });
   };
 
   return (

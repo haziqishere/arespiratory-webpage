@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, ChangeEvent } from "react";
+import { useRef, useState, ChangeEvent, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,8 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { ImagePlus } from "lucide-react";
 
+import { ImageLoading } from "@/components/imageLoading";
+
 interface Props {
   label: string;
   name: string;
@@ -20,7 +22,10 @@ interface Props {
 }
 
 const ImagePicker = ({ label, name, onImagesChange }: Props) => {
-  const [pickedImages, setPickedImages] = useState<string[]>([]);
+  const [pickedImages, setPickedImages] = useState<
+    { url: string; fileName: string; progress: number }[]
+  >([]);
+  //const [pickedImages, setPickedImages] = useState<string[]>([]);
   const imageInput = useRef<HTMLInputElement | null>(null);
 
   function handlePickClick() {
@@ -31,16 +36,20 @@ const ImagePicker = ({ label, name, onImagesChange }: Props) => {
 
   function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files || []);
-    const newImages: string[] = [];
+    const newImages: { url: string; fileName: string; progress: number }[] = [];
 
-    files.forEach((file, index) => {
+    files.forEach((file) => {
       const fileReader = new FileReader();
       fileReader.onload = () => {
-        newImages[index] = fileReader.result as string;
-        if (newImages.length === files.length && newImages.every(Boolean)) {
+        newImages.push({
+          url: fileReader.result as string,
+          fileName: file.name,
+          progress: 0,
+        });
+        if (newImages.length === files.length) {
           setPickedImages((prevImages) => {
             const updatedImages = [...prevImages, ...newImages];
-            onImagesChange(updatedImages);
+            onImagesChange(updatedImages.map((img) => img.url));
             return updatedImages;
           });
         }
@@ -48,6 +57,19 @@ const ImagePicker = ({ label, name, onImagesChange }: Props) => {
       fileReader.readAsDataURL(file);
     });
   }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPickedImages((prevImages) =>
+        prevImages.map((image) => ({
+          ...image,
+          progress: image.progress < 100 ? image.progress + 10 : 100,
+        }))
+      );
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>
@@ -70,13 +92,13 @@ const ImagePicker = ({ label, name, onImagesChange }: Props) => {
               </Card>
             </div>
           )}
-          {pickedImages.map((image: string, index) => (
+          {pickedImages.map((image, index) => (
             <CarouselItem key={index} className="relative w-full aspect-square">
               <div className="p-1">
                 <Card>
                   <CardContent className="flex items-center justify-center p-6">
                     <Image
-                      src={image}
+                      src={image.url}
                       alt={`Picked image ${index + 1}`}
                       height={300}
                       width={300}
@@ -91,6 +113,17 @@ const ImagePicker = ({ label, name, onImagesChange }: Props) => {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
+
+      <div>
+        {pickedImages.map((image, index) => (
+          <ImageLoading
+            key={index}
+            imageUrl={image.url}
+            fileName={image.fileName}
+            progress={image.progress}
+          />
+        ))}
+      </div>
 
       <div className="mt-4">
         <Input
